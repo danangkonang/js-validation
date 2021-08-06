@@ -1,12 +1,26 @@
 {
-  "name": "validation",
+  "name": "js-validation",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple form validation java script",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danangkonang/js-validation.git"
+  },
+  "issues": {
+    "url": "https://github.com/danangkonang/js-validation/issues"
+  },
+  "keywords": [
+    "js-validation",
+    "validation",
+    "validator"
+  ],
+  "author": {
+    "name": "danangkonang",
+		"email": "danangkonang21@gmail.com"
+  },
   "license": "ISC"
 }
