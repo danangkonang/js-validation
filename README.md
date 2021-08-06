@@ -1,8 +1,33 @@
-# Java Script Validation
+# @danangkonang/js-validation
 
-## basic example
+## Description
+
+simple validation for java script
+
+## Install
+
+Install with npm:
+
+```bash
+npm install @danangkonang/js-validation
+```
+
+Install with yarn:
+
+```bash
+yarn add @danangkonang/js-validation
+```
+
+## Rules
+- required
+- email
+- max:number
+- min:number
+- number
+
+## Simple Example
 ```js
-const validation = require('./validation');
+const validation = require('@danangkonang/js-validation');
 
 function index(){
   let form = [
@@ -35,14 +60,7 @@ function index(){
 };
 ```
 
-## Rules
-- required
-- email
-- max:number
-- min:number
-- number
-
-## with custom message
+## With Custom Message
 
 ```js
   let form = [
@@ -54,7 +72,7 @@ function index(){
   ]
 ```
 
-## add custom key for your data
+## Make Custom Key To Your Data
 
 ```js
   let form = [
