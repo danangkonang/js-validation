@@ -12,17 +12,17 @@ const validation = (valide) => {
     /*
     * for key error data position
     */ 
-    let dataKey = valid.key === undefined ? key : valid.key
-
+    let errorMessages = []
     valid.rules.split("|").map((rule, index) => {
-
       /*
       * check minimum character
       */
       if (rule.match("min")){
         let min = rule.split(":")[1]
-        let isMin = musthMinLength(valid.data, min, customMessages[index], dataKey);
-        errors = errors.concat(isMin)
+        let isMin = musthMinLength(valid.data, min, customMessages[index]);
+        if (isMin !== '') {
+          errorMessages = errorMessages.concat(isMin)
+        }
       }
 
       /*
@@ -30,34 +30,50 @@ const validation = (valide) => {
       */
       if (rule.match("max")){
         let max = rule.split(":")[1]
-        let isMax = musthMAxLength(valid.data, max, customMessages[index], dataKey);
-        errors = errors.concat(isMax)
+        let isMax = musthMAxLength(valid.data, max, customMessages[index]);
+        if (isMax !== '') {
+          errorMessages = errorMessages.concat(isMax)
+        }
       }
 
       /*
       * check required
       */
       if (rule === "required") {
-        let isRequired = musthRequired(valid.data, customMessages[index], dataKey);
-        errors = errors.concat(isRequired)
+        let isRequired = musthRequired(valid.data, customMessages[index]);
+        if (isRequired !== '') {
+          errorMessages = errorMessages.concat(isRequired)
+        }
       }
 
       /*
       * check valid email address
       */
       if (rule === "email") {
-        let isEmail = validateEmail(valid.data, customMessages[index], dataKey);
-        errors = errors.concat(isEmail)
+        let isEmail = validateEmail(valid.data, customMessages[index]);
+        if (isEmail !== '') {
+          errorMessages = errorMessages.concat(isEmail)
+        }
       }
 
       /*
       * check valid number
       */
       if (rule === "number") {
-        let isNumber = validateNumber(valid.data, customMessages[index], dataKey);
-        errors = errors.concat(isNumber)
+        let isNumber = validateNumber(valid.data, customMessages[index]);
+        if (isNumber !== '') {
+          errorMessages = errorMessages.concat(isNumber)
+        }
       }
     });
+    if (errorMessages.length > 0) {
+      let e = [{
+        name: valid.data,
+        key: key,
+        message: errorMessages.toString(),
+      }]
+      errors = errors.concat(e)
+    }
   });
   
   if (errors.length > 0) {
@@ -72,60 +88,40 @@ const validation = (valide) => {
   }
 };
 
-const musthMinLength = (value, min, customMessage, key) => {
+const musthMinLength = (value, min, customMessage) => {
   if (value.length <= min) {
-    return [{
-      name: value,
-      key: key,
-      message: customMessage !== undefined ? customMessage : `minimum length is "${min}"`,
-    }]
+    return customMessage !== undefined ? customMessage : `minimum length is "${min}"`
   }
-  return []
+  return ''
 };
 
-const musthMAxLength = (value, max, customMessage, key) => {
+const musthMAxLength = (value, max, customMessage) => {
   if (value.length >= max) {
-    return [{
-      name: value,
-      key: key,
-      message: customMessage !== undefined ? customMessage : `maximum length is "${max}"`,
-    }]
+    return customMessage !== undefined ? customMessage : `maximum length is "${max}"`
   }
-  return []
+  return ''
 };
 
-const musthRequired = (value, customMessage, key) => {
+const musthRequired = (value, customMessage) => {
   if (value === undefined || value === null || value === '') {
-    return {
-      name: value,
-      key: key,
-      message: customMessage !== undefined ? customMessage : `"${value}" is required`
-    }
+    return customMessage !== undefined ? customMessage : `this fied is required`
   }
-  return []
+  return ''
 };
 
-function validateEmail(value, customMessage, key) {
+function validateEmail(value, customMessage) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if(!re.test(String(value).toLowerCase())){
-    return {
-      name: value,
-      key: key,
-      message: customMessage !== undefined ? customMessage : `"${value}" not valid email`
-    }
+    return customMessage !== undefined ? customMessage : `this fied invalid email address`
   }
-  return []
+  return ''
 }
 
-function validateNumber(value, customMessage, key) {
+function validateNumber(value, customMessage) {
   if(!Number.isInteger(value)){
-    return {
-      name: value,
-      key: key,
-      message: customMessage !== undefined ? customMessage : `"${value}" not valid number`
-    }
+    return customMessage !== undefined ? customMessage : `this fied invalid number`
   }
-  return []
+  return ''
 }
 
 module.exports = {

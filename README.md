@@ -51,12 +51,18 @@ function index(){
   //   isValid: false,
   //   errors: [
   //     {
-  //       name: '23july',
-  //       key: 2,
-  //       message: '"23july" not valid number'
-  //     }
+  //       name: '',
+  //       key: 0,
+  //       message: 'this fied is required,this fied not valid email'
+  //     },
+  //     {
+  //        name: '23july',
+  //        key: 2,
+  //        message: 'this fied not valid number'
+  //      }
   //   ]
   // }
+
 };
 ```
 

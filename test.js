@@ -8,7 +8,7 @@ function testing(){
     //   // key: "key",
     // }
     {
-      data: "email@email.com",
+      data: "",
       rules: "required|email",
     },
     {
