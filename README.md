@@ -100,8 +100,7 @@ function index(){
 // ]);
 let isValid = validation.validation([
   {
-    data: req.files,
-    messages: 'salah format|format tidakboleh',
+    data: files,
     rules: 'min:1000|max:120000|type:jpg,png,pdf,docx',
   }
 ]);
