@@ -24,6 +24,7 @@ yarn add @danangkonang/js-validation
 - max:number
 - min:number
 - number
+- url
 
 ## Simple Example
 ```js
@@ -88,4 +89,15 @@ function index(){
       key: "your key",
     }
   ]
+```
+
+```js
+let isValid = validation.validation([
+  {
+    data: req.files,
+    messages: 'salah format|format tidakboleh',
+    rules: 'min:1000|max:120000|type:jpg,png,pdf,docx',
+  }
+]);
+console.log(isValid);
 ```

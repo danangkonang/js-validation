@@ -1,6 +1,6 @@
-const validation = (valide) => {
+const validation = (data) => {
   let errors = []
-  valide.map((valid, key) => {
+  data.map((valid, key) => {
     /*
     * custom error message
     */ 
@@ -9,9 +9,6 @@ const validation = (valide) => {
       customMessages = valid.messages.split("|").map((message) => message);
     }
 
-    /*
-    * for key error data position
-    */ 
     let errorMessages = []
     valid.rules.split("|").map((rule, index) => {
       /*
@@ -19,7 +16,7 @@ const validation = (valide) => {
       */
       if (rule.match("min")){
         let min = rule.split(":")[1]
-        let isMin = musthMinLength(valid.data, min, customMessages[index]);
+        let isMin = minLengthValid(valid.data, min, customMessages[index]);
         if (isMin !== '') {
           errorMessages = errorMessages.concat(isMin)
         }
@@ -30,7 +27,7 @@ const validation = (valide) => {
       */
       if (rule.match("max")){
         let max = rule.split(":")[1]
-        let isMax = musthMAxLength(valid.data, max, customMessages[index]);
+        let isMax = maxLengthValid(valid.data, max, customMessages[index]);
         if (isMax !== '') {
           errorMessages = errorMessages.concat(isMax)
         }
@@ -40,7 +37,7 @@ const validation = (valide) => {
       * check required
       */
       if (rule === "required") {
-        let isRequired = musthRequired(valid.data, customMessages[index]);
+        let isRequired = requiredValid(valid.data, customMessages[index]);
         if (isRequired !== '') {
           errorMessages = errorMessages.concat(isRequired)
         }
@@ -50,7 +47,7 @@ const validation = (valide) => {
       * check valid email address
       */
       if (rule === "email") {
-        let isEmail = validateEmail(valid.data, customMessages[index]);
+        let isEmail = emailValid(valid.data, customMessages[index]);
         if (isEmail !== '') {
           errorMessages = errorMessages.concat(isEmail)
         }
@@ -60,11 +57,22 @@ const validation = (valide) => {
       * check valid number
       */
       if (rule === "number") {
-        let isNumber = validateNumber(valid.data, customMessages[index]);
+        let isNumber = numberValid(valid.data, customMessages[index]);
         if (isNumber !== '') {
           errorMessages = errorMessages.concat(isNumber)
         }
       }
+
+      /*
+      * check valid url
+      */
+      if (rule === "url") {
+        let isUrl = urlValid(valid.data, customMessages[index]);
+        if (isUrl !== '') {
+          errorMessages = errorMessages.concat(isUrl)
+        }
+      }
+
     });
     if (errorMessages.length > 0) {
       let e = [{
@@ -88,28 +96,28 @@ const validation = (valide) => {
   }
 };
 
-const musthMinLength = (value, min, customMessage) => {
+const minLengthValid = (value, min, customMessage) => {
   if (value.length <= min) {
     return customMessage !== undefined ? customMessage : `minimum length is "${min}"`
   }
   return ''
 };
 
-const musthMAxLength = (value, max, customMessage) => {
+const maxLengthValid = (value, max, customMessage) => {
   if (value.length >= max) {
     return customMessage !== undefined ? customMessage : `maximum length is "${max}"`
   }
   return ''
 };
 
-const musthRequired = (value, customMessage) => {
+const requiredValid = (value, customMessage) => {
   if (value === undefined || value === null || value === '') {
     return customMessage !== undefined ? customMessage : `this fied is required`
   }
   return ''
 };
 
-function validateEmail(value, customMessage) {
+function emailValid(value, customMessage) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if(!re.test(String(value).toLowerCase())){
     return customMessage !== undefined ? customMessage : `this fied invalid email address`
@@ -117,13 +125,126 @@ function validateEmail(value, customMessage) {
   return ''
 }
 
-function validateNumber(value, customMessage) {
+function numberValid(value, customMessage) {
   if(!Number.isInteger(value)){
     return customMessage !== undefined ? customMessage : `this fied invalid number`
   }
   return ''
 }
 
+function urlValid(value, customMessage) {
+  const url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
+  if(!url.test(String(value).toLowerCase())){
+    return customMessage !== undefined ? customMessage : `this fied invalid url`
+  }
+  return ''
+}
+
+const validationFile = (validate) => {
+  let errors = []
+  validate.map((check, key) => {
+    /*
+    * custom error message
+    */ 
+    let customMessage = []
+    if (check.messages !== undefined) {
+      customMessage = check.messages.split("|").map((message) => message);
+    }
+
+    let errorMessage = []
+    let errorFilename = []
+
+    if (check.data.length === 0) {
+      let empty = {
+        name: 0,
+        key: 0,
+        message: 'file not found',
+      }
+      errors = errors.concat(empty)
+      return
+    }
+    check.data.map((file, index) => {
+      check.rules.split("|").map((rule) => {
+        /*
+        * check minimum size allowed
+        */
+        if (rule.match("min")){
+          // let min = rule.split(":")[1]
+          // let isMin = minLengthValid(valid.data, min, customMessage[index]);
+          // if (isMin !== '') {
+          //   errorMessage = errorMessage.concat(isMin)
+          // }
+        }
+  
+        /*
+        * check maximum size allowed
+        */
+        if (rule.match("max")){
+          // let max = rule.split(":")[1]
+          // let isMax = maxLengthValid(valid.data, max, customMessage[index]);
+          // if (isMax !== '') {
+          //   errorMessage = errorMessage.concat(isMax)
+          // }
+        }
+  
+        /*
+        * check maximum extension allowed
+        */
+        if (rule.match("type")){
+          let isAllowFile = extensionValid(rule, file.originalname, customMessage[index])
+          if (isAllowFile !== '') {
+            errorMessage = errorMessage.concat(isAllowFile)
+            errorFilename = errorFilename.concat(file.originalname)
+          }
+        }
+  
+        /*
+        * check required
+        */
+        if (rule === "required") {
+          // let isRequired = requiredValid(valid.data, customMessage[index]);
+          // if (isRequired !== '') {
+          //   errorMessage = errorMessage.concat(isRequired)
+          // }
+        }
+  
+      });
+    })
+    if (errorMessage.length > 0) {
+      let e = [{
+        name: errorFilename.toString(),
+        key: key,
+        message: errorMessage.toString(),
+      }]
+      errors = errors.concat(e)
+    }
+  })
+
+  if (errors.length > 0) {
+    return {
+      isValid: false,
+      errors: errors
+    }
+  }
+  return {
+    isValid: true,
+    errors: errors
+  }
+}
+
+function extensionValid(allowedFile, nameFile, customMessage) {
+  let fileRule = allowedFile.split(":")[1]
+  let arrayFileRule = fileRule.split(",")
+  let regexExtension = '[^.]+$'
+  let extension = nameFile.match(regexExtension)
+  let isAllow = arrayFileRule.includes(extension[0])
+  if(!isAllow){
+    return customMessage !== undefined ? customMessage : `this extensian file not allowed`
+  }
+  return ''
+}
+
 module.exports = {
   validation,
+  validationFile,
 };
