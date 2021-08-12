@@ -92,6 +92,12 @@ function index(){
 ```
 
 ```js
+// validation.validation([
+//   {
+//     data: [],
+//     rules: 'min:1000|max:120000|type:jpg,png,pdf,docx',
+//   }
+// ]);
 let isValid = validation.validation([
   {
     data: req.files,

@@ -154,62 +154,55 @@ const validationFile = (validate) => {
     let errorMessage = []
     let errorFilename = []
 
-    if (check.data.length === 0) {
-      let empty = {
-        name: 0,
-        key: 0,
-        message: 'file not found',
-      }
-      errors = errors.concat(empty)
-      return
-    }
-    check.data.map((file, index) => {
-      check.rules.split("|").map((rule) => {
-        /*
-        * check minimum size allowed
-        */
-        if (rule.match("min")){
-          // let min = rule.split(":")[1]
-          // let isMin = minLengthValid(valid.data, min, customMessage[index]);
-          // if (isMin !== '') {
-          //   errorMessage = errorMessage.concat(isMin)
-          // }
-        }
-  
-        /*
-        * check maximum size allowed
-        */
-        if (rule.match("max")){
-          // let max = rule.split(":")[1]
-          // let isMax = maxLengthValid(valid.data, max, customMessage[index]);
-          // if (isMax !== '') {
-          //   errorMessage = errorMessage.concat(isMax)
-          // }
-        }
-  
-        /*
-        * check maximum extension allowed
-        */
-        if (rule.match("type")){
-          let isAllowFile = extensionValid(rule, file.originalname, customMessage[index])
-          if (isAllowFile !== '') {
-            errorMessage = errorMessage.concat(isAllowFile)
-            errorFilename = errorFilename.concat(file.originalname)
+    if (check.data !== undefined) {
+      check.data.map((file, index) => {
+        check.rules.split("|").map((rule) => {
+          /*
+          * check minimum size file
+          */
+          if (rule.match("min")){
+            let min = rule.split(":")[1]
+            let isMinimumSize = sizeMinimumValid(file.size, min, customMessage[index]);
+            if (isMinimumSize !== '') {
+              errorMessage = errorMessage.concat(isMinimumSize)
+            }
           }
-        }
-  
-        /*
-        * check required
-        */
-        if (rule === "required") {
-          // let isRequired = requiredValid(valid.data, customMessage[index]);
-          // if (isRequired !== '') {
-          //   errorMessage = errorMessage.concat(isRequired)
-          // }
-        }
-  
-      });
-    })
+    
+          /*
+          * check maximum size file
+          */
+          if (rule.match("max")){
+            let max = rule.split(":")[1]
+            let isMaximumSize = sizeMaximumValid(file.size, max, customMessage[index]);
+            if (isMaximumSize !== '') {
+              errorMessage = errorMessage.concat(isMaximumSize)
+            }
+          }
+    
+          /*
+          * check maximum extension allowed
+          */
+          if (rule.match("type")){
+            let isAllowFile = extensionValid(rule, file.originalname, customMessage[index])
+            if (isAllowFile !== '') {
+              errorMessage = errorMessage.concat(isAllowFile)
+              errorFilename = errorFilename.concat(file.originalname)
+            }
+          }
+    
+          /*
+          * check required
+          */
+          if (rule === "required") {
+            // let isRequired = requiredValid(valid.data, customMessage[index]);
+            // if (isRequired !== '') {
+            //   errorMessage = errorMessage.concat(isRequired)
+            // }
+          }
+    
+        });
+      })
+    }
     if (errorMessage.length > 0) {
       let e = [{
         name: errorFilename.toString(),
@@ -230,6 +223,20 @@ const validationFile = (validate) => {
     isValid: true,
     errors: errors
   }
+}
+
+function sizeMinimumValid(size, min, customMessage) {
+  if (size < min) {
+    return customMessage !== undefined ? customMessage : "minimum size file is " + min + "" 
+  }
+  return ''
+}
+
+function sizeMaximumValid(size, max, customMessage) {
+  if (size > max) {
+    return customMessage !== undefined ? customMessage : "maximum size file is " + max + "" 
+  }
+  return ''
 }
 
 function extensionValid(allowedFile, nameFile, customMessage) {

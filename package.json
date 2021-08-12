@@ -18,7 +18,8 @@
   "keywords": [
     "js-validation",
     "validation",
-    "validator"
+    "validator",
+    "@danangkonang/js-validation"
   ],
   "author": {
     "name": "danangkonang",
