@@ -77,7 +77,7 @@ const validation = (data) => {
     if (errorMessages.length > 0) {
       let e = [{
         name: valid.data,
-        key: key,
+        key: valid.key === undefined ? key : valid.key,
         message: errorMessages.toString(),
       }]
       errors = errors.concat(e)
@@ -206,7 +206,7 @@ const validationFile = (validate) => {
     if (errorMessage.length > 0) {
       let e = [{
         name: errorFilename.toString(),
-        key: key,
+        key: check.key === undefined ? key : check.key,
         message: errorMessage.toString(),
       }]
       errors = errors.concat(e)

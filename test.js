@@ -5,7 +5,7 @@ function testing(){
       data: "email@email.com",
       rules: "required|email|max:50|min:5|number",
       messages: "required|invalid email|maximum 10 caracter|minimum 5 caracter|musth valid number",
-      key: "key",
+      key: "email-key",
     },
     {
       data: "",
