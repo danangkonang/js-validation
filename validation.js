@@ -243,7 +243,7 @@ function extensionValid(allowedFile, nameFile, customMessage) {
   let fileRule = allowedFile.split(":")[1]
   let arrayFileRule = fileRule.split(",")
   let regexExtension = '[^.]+$'
-  let extension = nameFile.match(regexExtension)
+  let extension = nameFile.toLowerCase().match(regexExtension)
   let isAllow = arrayFileRule.includes(extension[0])
   if(!isAllow){
     return customMessage !== undefined ? customMessage : `this extensian file not allowed`
