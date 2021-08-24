@@ -111,7 +111,7 @@ const maxLengthValid = (value, max, customMessage) => {
 };
 
 const requiredValid = (value, customMessage) => {
-  if (value === undefined || value === null || value === '') {
+  if (value === undefined || value === null || value === '' || value === 'null') {
     return customMessage !== undefined ? customMessage : `this fied is required`
   }
   return ''
