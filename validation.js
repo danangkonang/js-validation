@@ -73,6 +73,26 @@ const validation = (data) => {
         }
       }
 
+      /*
+      * check valid array
+      */
+      if (rule === "array") {
+        let isArray = arrayValid(valid.data, customMessages[index]);
+        if (isArray !== '') {
+          errorMessages = errorMessages.concat(isArray)
+        }
+      }
+
+      /*
+      * check valid object
+      */
+      if (rule === "object") {
+        let isObject = objectValid(valid.data, customMessages[index]);
+        if (isObject !== '') {
+          errorMessages = errorMessages.concat(isObject)
+        }
+      }
+
     });
     if (errorMessages.length > 0) {
       let e = [{
@@ -136,6 +156,20 @@ function urlValid(value, customMessage) {
   const url = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi;
   if(!url.test(String(value).toLowerCase())){
     return customMessage !== undefined ? customMessage : `this fied invalid url`
+  }
+  return ''
+}
+
+function arrayValid(value, customMessage) {
+  if(!Array.isArray(value)){
+    return customMessage !== undefined ? customMessage : `this fied mush be array`
+  }
+  return ''
+}
+
+function objectValid(value, customMessage) {
+  if(typeof(value) !== 'object' || Array.isArray(value)){
+    return customMessage !== undefined ? customMessage : `this fied mush be object`
   }
   return ''
 }

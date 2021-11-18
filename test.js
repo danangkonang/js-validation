@@ -22,7 +22,15 @@ function testing(){
     {
       data: "https://july.com?testing=we&a=oi",
       rules: "url",
-    }
+    },
+    {
+      data: [],
+      rules: "array",
+    },
+    {
+      data: {},
+      rules: "object",
+    },
   ]
 
   let isValid = validation.validation(form);

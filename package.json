@@ -1,6 +1,6 @@
 {
   "name": "@danangkonang/js-validation",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simple form validation java script",
   "main": "validation.js",
   "scripts": {
@@ -18,6 +18,8 @@
   "keywords": [
     "js-validation",
     "validation",
+    "node validation",
+    "express validation",
     "validator",
     "@danangkonang/js-validation"
   ],
