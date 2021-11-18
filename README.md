@@ -25,6 +25,8 @@ yarn add @danangkonang/js-validation
 - min:number
 - number
 - url
+- array
+- object
 
 ## Simple Example
 ```js
